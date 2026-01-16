@@ -37,8 +37,8 @@ if [ -f .hytale-downloader-credentials.json ]; then
                 -d "refresh_token=$(jq -r .refresh_token <<< $CREDENTIALS)"
         )
         CREDENTIALS=$(jq -c -n "{
-            \"access_token\": \"$(jq -r .access_token <<< $RESPONSE)\",
-            \"refresh_token\": \"$(jq -r .refresh_token <<< $RESPONSE)\",
+            \"access_token\": \"$(jq -r .access_token <<< $REFRESH_RESPONSE)\",
+            \"refresh_token\": \"$(jq -r .refresh_token <<< $REFRESH_RESPONSE)\",
             \"expires_at\": $(( `date +%s` + `jq -r .expires_in <<< $REFRESH_RESPONSE` )),
             \"branch\": \"$PATCHLINE\"
         }")
@@ -105,12 +105,10 @@ else
         echo "Error occured while parsing response" >&2
         exit 1
     fi
-
-    # Save credentials to file
-    echo $CREDENTIALS > .hytale-downloader-credentials.json  
-
 fi
 
+# Save credentials to file
+echo $CREDENTIALS > .hytale-downloader-credentials.json
 
 ACCESS_TOKEN=$(jq -r .access_token <<< $CREDENTIALS)
 
