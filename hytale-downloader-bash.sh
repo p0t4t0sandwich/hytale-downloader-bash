@@ -50,7 +50,7 @@ if [ -f .hytale-downloader-credentials.json ]; then
 
     # Default to 0 if expires_at is not present (as Golang would)
     EXPIRES_AT=$(jq .expires_at <<< $CREDENTIALS)
-    if [[ $? -ne 0 ]]; then
+    if [[ $? -ne 0 || $EXPIRES_AT = "null" || -z $EXPIRES_AT ]]; then
         EXPIRES_AT=0
     fi
 
